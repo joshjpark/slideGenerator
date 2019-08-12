@@ -219,10 +219,8 @@ def createSlideTextandFont(phrase, font, size):
         }
         }
     ]
-
     SLIDES.presentations().batchUpdate(body={'requests': send_req},
     presentationId=deckID).execute()
-
 
 
 def createSlideTextFontBackground(phrase, font, size, url):
@@ -271,11 +269,34 @@ def createSlideTextFontBackground(phrase, font, size, url):
             }
         }
     ]
-
     SLIDES.presentations().batchUpdate(body={'requests': send_req},
     presentationId=deckID).execute()
 
+'''
+@param:     left_margin
+@param:     top_margin
+'''
+def createTextBoxMargin():
+    slideNewID = gen_uuid()
+    textBoxID = gen_uuid()
 
+    send_req = [    
+    {'createSlide': {
+        'objectId': slideNewID,
+        # predefinedLayout : enum
+        # layoutId : string Layout ID: the object ID of one of the layouts in the presentation
+        'slideLayoutReference': {'predefinedLayout': 'TITLE_AND_TWO_COLUMNS'},
+        'placeholderIdMappings': [{
+            'objectId': textBoxID,
+            'layoutPlaceholder': {'type': 'BODY', 'index': 0}
+        }]
+    }},
+
+    {'insertText': {'objectId': textBoxID,      'text': 'This is a sample margin'}}
+    ]
+    SLIDES.presentations().batchUpdate(body={'requests': send_req},
+    presentationId=deckID).execute()
+    
 
 # further_req = [
 #     {'createSlide': {
@@ -329,6 +350,7 @@ createSlideTextandFont("This is fun!", "Courier New", 25)
 createSlideTextandFont("This is fun!", "Times New Roman", 20)
 createSlideTextandFont("This is fun!", "Georgia", 100)
 createSlideTextFontBackground("This is fun", "Courier New", 25, 'https://visme.co/blog/wp-content/uploads/2017/07/50-Beautiful-and-Minimalist-Presentation-Backgrounds-025.jpg')
+createTextBoxMargin()
 print('DONE')
 
 #Use python3 to run 
