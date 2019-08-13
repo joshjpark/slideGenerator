@@ -273,6 +273,98 @@ def createSlideTextFontBackground(phrase, font, size, url):
     SLIDES.presentations().batchUpdate(body={'requests': send_req},
     presentationId=deckID).execute()
 
+def createGoodSlideTextFontBackground(phrase, font, size, url):
+    slideNewID = gen_uuid()
+    textBoxID = gen_uuid()
+
+    send_req = [
+        {'createSlide': {
+            'objectId': slideNewID
+        }}, 
+        
+        {
+            'createShape': {
+                'objectId' : textBoxID,
+                'shapeType': 'TEXT_BOX',
+                'elementProperties': {
+                    'pageObjectId': slideNewID,
+                    'size': {
+                        'width': {'magnitude': 3000000, 'unit': 'EMU' },
+                        'height': {'magnitude': 3000000, 'unit': 'EMU'}
+                    },
+                    'transform': {
+                        'scaleX': 2.7492,
+                        'scaleY': 1.5576,
+                        'translateX': 448200,
+                        'translateY': 235350,
+                        'unit': 'EMU'
+                    }
+                }
+            }
+        },
+
+        {
+        'insertText': {'objectId': textBoxID, 'text': phrase}
+        },
+        
+        {
+        'updateTextStyle': {
+            'objectId': textBoxID,
+            'style': {
+                'fontFamily': font,
+                'fontSize': {
+                    'magnitude':size,
+                    'unit': 'PT'
+            }
+        },
+            'textRange': {'type': 'FIXED_RANGE', 'startIndex' : 0, 'endIndex': len(phrase)},
+            'fields': 'fontFamily, fontSize'
+        }
+        },
+
+        {
+            'updatePageProperties': {
+                'objectId': slideNewID,
+                'pageProperties': {
+                    'pageBackgroundFill': {
+                        'stretchedPictureFill': {
+                            'contentUrl': url
+                        }
+                    }
+                },
+                'fields': 'pageBackgroundFill'
+            }
+        }
+    ]
+
+    SLIDES.presentations().batchUpdate(body={'requests': send_req},
+    presentationId=deckID).execute()
+
+
+    
+
+        # {
+        #     'createShape': {
+        #         'objectId': textBoxID,
+        #         'shapeType': 'TEXT_BOX',
+        #         'elementProperties': {
+        #             'pageObjectId': slideNewID,
+        #             'size': {
+        #                 'width': {'magnitude': 3000000, 'unit': 'EMU'},
+        #                 'height': {'magnitude': 3000000, 'unit': 'EMU'}
+        #             },
+        #             'transform': {
+        #                 'scaleX': 2.8402,
+        #                 'scaleY': 1.1388,
+        #                 'translateX': 311700,
+        #                 'translateY': 745150,
+        #                 'unit': 'EMU'
+        #             }    
+        #         }
+        #     }
+        # },
+
+
 '''
 @param:     left_margin
 @param:     top_margin
@@ -361,7 +453,7 @@ def createTextBoxMargins(msg):
     #         },
     #     },
     # }},
-
+    
 
 def createWorshipSlideTextBox(phrase, font, size):
     slideNewID = gen_uuid()
@@ -445,7 +537,9 @@ def createWorshipSlideTextBox(phrase, font, size):
 # SLIDES.presentations().batchUpdate(body={'requests': further_req},
 #         presentationId=deckID).execute()
 
+'''for background/special song'''
 
+'''for reading verses'''
 def createWorshipServiceSlides(book, fromChapter, fromVerse, toChapter, toVerse, font, size):  
     verses = bib.get_verses(book, fromChapter, fromVerse, toChapter, toVerse)
     temp = []
@@ -513,10 +607,19 @@ for verse in verses2:
 createWorshipSlideTextBox('1 Jesus wept \n \n2 Jesus wept', "Average", '28')
 
 # createWorshipServiceSlides('John', '1', '1', '1', '10', 'Average', '28')
-createWorshipServiceSlides('John', '12', '1', '12', '11', 'Average', '28')
+createWorshipServiceSlides('John', '12', '1', '12', '19', 'Average', '28')
 
-# testWorshipServiceSlides('John', '12', '1', '12', '11', 'Average', '28')
+createSlideTextFontBackground('hello', 'Average', '28', 'https://images.unsplash.com/photo-1530688957198-8570b1819eeb?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&w=1000&q=80')
 
+
+createGoodSlideTextFontBackground('Hello world', 'Average', '28', 'https://images.unsplash.com/photo-1530688957198-8570b1819eeb?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&w=1000&q=80')
 print('DONE')
 
 #Use python3 to run 
+
+
+#things to improve on:
+# verses arrange logic
+# background color contrast with text
+# title pages
+# come up with better functions call names
