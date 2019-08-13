@@ -1,6 +1,7 @@
 #(1) Standard set up for Google Slides API 
 from __future__ import print_function
 import uuid
+import bib
 
 from apiclient import discovery
 from httplib2 import Http
@@ -298,6 +299,46 @@ def createTextBoxMargin():
     presentationId=deckID).execute()
     
 
+def createTextBoxMargins(msg):
+    slideNewID = gen_uuid()
+    textBoxID = gen_uuid()
+    
+    send_req = [
+        {'createSlide': {
+            'objectId': slideNewID
+        }},
+
+        {
+            'createShape': {
+                'objectId': textBoxID,
+                'shapeType': 'TEXT_BOX',
+                'elementProperties': {
+                    'pageObjectId': slideNewID,
+                    'size': {
+                        'height': {
+                            'magnitude': 400,
+                            'unit': 'PT'
+                        },
+                        'width': {
+                            'magnitude': 700,
+                            'unit': 'PT'
+                        }
+                    }
+                }
+            }
+        },
+
+        {
+            'insertText': {
+                'objectId': textBoxID,
+                'insertionIndex': 0,
+                'text': msg
+            }
+        }
+    ]
+
+    SLIDES.presentations().batchUpdate(body={'requests': send_req},
+    presentationId=deckID).execute()
 # further_req = [
 #     {'createSlide': {
 #         'objectId': mpSlideID,
@@ -320,6 +361,8 @@ add a text box
 @param:     slideID
 @param:     msg
 '''
+
+
 # def addTextBox(slideID, msg):
 #     textboxID = gen_uuid()
 #     send_req = [
@@ -350,7 +393,10 @@ createSlideTextandFont("This is fun!", "Courier New", 25)
 createSlideTextandFont("This is fun!", "Times New Roman", 20)
 createSlideTextandFont("This is fun!", "Georgia", 100)
 createSlideTextFontBackground("This is fun", "Courier New", 25, 'https://visme.co/blog/wp-content/uploads/2017/07/50-Beautiful-and-Minimalist-Presentation-Backgrounds-025.jpg')
-createTextBoxMargin()
+
+verses2 = bib.get_verses('John', '6', '22', '6', '23')
+for verse in verses2:
+    createTextBoxMargins(verse)
 print('DONE')
 
 #Use python3 to run 
