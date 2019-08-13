@@ -363,7 +363,7 @@ def createTextBoxMargins(msg):
     # }},
 
 
-def createWorshipSlideTextBox(msg):
+def createWorshipSlideTextBox(phrase, font, size):
     slideNewID = gen_uuid()
     textBoxID = gen_uuid()
     
@@ -397,7 +397,32 @@ def createWorshipSlideTextBox(msg):
             'insertText': {
                 'objectId': textBoxID,
                 'insertionIndex': 0,
-                'text': msg
+                'text': phrase
+            }
+        },
+
+        {
+            'updateTextStyle': {
+                'objectId': textBoxID,
+                'style': {
+                    'fontFamily': font,
+                    'fontSize': {
+                        'magnitude': size,
+                        'unit': 'PT'
+                    }
+                },
+                'textRange': {'type': 'FIXED_RANGE', 'startIndex': 0, 'endIndex': len(phrase)},
+                'fields': 'fontFamily, fontSize',
+            }
+        },
+
+        {
+            'updateParagraphStyle': {
+                'objectId': textBoxID,
+                'style': {
+                    'lineSpacing': 150,
+                },
+                'fields': 'lineSpacing'
             }
         }
     ]
@@ -420,6 +445,21 @@ def createWorshipSlideTextBox(msg):
 # SLIDES.presentations().batchUpdate(body={'requests': further_req},
 #         presentationId=deckID).execute()
 
+
+def createWorshipServiceSlides(book, fromChapter, fromVerse, toChapter, toVerse, font, size):  
+    verses = bib.get_verses(book, fromChapter, fromVerse, toChapter, toVerse)
+    temp = []
+
+    for i in range(0, len(verses)):
+        if i % 2 == 0:
+            temp.append(verses[i])
+            if i == len(verses)-1:
+                createWorshipSlideTextBox(temp, font, size)
+        elif i % 2 == 1:
+            temp.append(verses[i])
+            createWorshipSlideTextBox(temp[0] + '\n' + temp[1], font, size)
+            temp = []
+                    
 
 
 '''
@@ -464,7 +504,9 @@ verses2 = bib.get_verses('John', '6', '22', '6', '25')
 for verse in verses2:
     createTextBoxMargins(verse)
 
-createWorshipSlideTextBox('Jesus wept')
+createWorshipSlideTextBox('1 Jesus wept \n \n2 Jesus wept', "Average", '28')
+
+createWorshipServiceSlides('John', '1', '1', '1', '10', 'Average', '28')
 
 print('DONE')
 
