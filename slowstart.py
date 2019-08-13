@@ -420,7 +420,7 @@ def createWorshipSlideTextBox(phrase, font, size):
             'updateParagraphStyle': {
                 'objectId': textBoxID,
                 'style': {
-                    'lineSpacing': 150,
+                    'lineSpacing': 150
                 },
                 'fields': 'lineSpacing'
             }
@@ -454,12 +454,18 @@ def createWorshipServiceSlides(book, fromChapter, fromVerse, toChapter, toVerse,
         if i % 2 == 0:
             temp.append(verses[i])
             if i == len(verses)-1:
-                createWorshipSlideTextBox(temp, font, size)
+                createWorshipSlideTextBox(temp[0], font, size)
         elif i % 2 == 1:
             temp.append(verses[i])
             createWorshipSlideTextBox(temp[0] + '\n' + temp[1], font, size)
             temp = []
-                    
+
+
+# def testWorshipServiceSlides(book, fromChapter, fromVerse, toChapter, toVerse, font, size):
+#     verses = bib.get_verses(book, fromChapter, fromVerse, toChapter, toVerse)
+    
+#     for i in range(0, len(verses)):
+#         createWorshipSlideTextBox(verses[i], font,size)
 
 
 '''
@@ -506,7 +512,10 @@ for verse in verses2:
 
 createWorshipSlideTextBox('1 Jesus wept \n \n2 Jesus wept', "Average", '28')
 
-createWorshipServiceSlides('John', '1', '1', '1', '10', 'Average', '28')
+# createWorshipServiceSlides('John', '1', '1', '1', '10', 'Average', '28')
+createWorshipServiceSlides('John', '12', '1', '12', '11', 'Average', '28')
+
+# testWorshipServiceSlides('John', '12', '1', '12', '11', 'Average', '28')
 
 print('DONE')
 
