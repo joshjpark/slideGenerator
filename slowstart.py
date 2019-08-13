@@ -339,6 +339,72 @@ def createTextBoxMargins(msg):
 
     SLIDES.presentations().batchUpdate(body={'requests': send_req},
     presentationId=deckID).execute()
+
+
+
+
+
+
+
+    # {'createShape': {
+    #     'objectId': str24ID,
+    #     'shapeType': 'STAR_24',
+    #     'elementProperties': {
+    #         "pageObjectId": mpSlideID,
+    #         'size': {
+    #             'height': {'magnitude': 3000000, 'unit': 'EMU'},
+    #             'width':  {'magnitude': 3000000, 'unit': 'EMU'}
+    #         },
+    #         'transform': {
+    #             'unit': 'EMU', 'scaleX': 0.7079, 'scaleY': 0.6204,
+    #             'translateX': 2036175, 'translateY': 237350,
+    #         },
+    #     },
+    # }},
+
+
+def createWorshipSlideTextBox(msg):
+    slideNewID = gen_uuid()
+    textBoxID = gen_uuid()
+    
+    send_req = [
+        {'createSlide': {
+            'objectId': slideNewID
+        }},
+        
+        {
+            'createShape': {
+                'objectId': textBoxID,
+                'shapeType': 'TEXT_BOX',
+                'elementProperties': {
+                    'pageObjectId': slideNewID,
+                    'size': {
+                        'width': {'magnitude': 3000000, 'unit': 'EMU'},
+                        'height': {'magnitude': 3000000, 'unit': 'EMU'}
+                    },
+                    'transform': {
+                        'scaleX': 2.8402,
+                        'scaleY': 1.1388,
+                        'translateX': 311700,
+                        'translateY': 745150,
+                        'unit': 'EMU'
+                    }    
+                }
+            }
+        },
+        
+        {
+            'insertText': {
+                'objectId': textBoxID,
+                'insertionIndex': 0,
+                'text': msg
+            }
+        }
+    ]
+
+    SLIDES.presentations().batchUpdate(body={'requests': send_req},
+    presentationId=deckID).execute()
+
 # further_req = [
 #     {'createSlide': {
 #         'objectId': mpSlideID,
@@ -394,9 +460,12 @@ createSlideTextandFont("This is fun!", "Times New Roman", 20)
 createSlideTextandFont("This is fun!", "Georgia", 100)
 createSlideTextFontBackground("This is fun", "Courier New", 25, 'https://visme.co/blog/wp-content/uploads/2017/07/50-Beautiful-and-Minimalist-Presentation-Backgrounds-025.jpg')
 
-verses2 = bib.get_verses('John', '6', '22', '6', '23')
+verses2 = bib.get_verses('John', '6', '22', '6', '25')
 for verse in verses2:
     createTextBoxMargins(verse)
+
+createWorshipSlideTextBox('Jesus wept')
+
 print('DONE')
 
 #Use python3 to run 
