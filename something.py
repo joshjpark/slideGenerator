@@ -13,8 +13,6 @@ def createWorshipServiceSlides(book, fromChapter, fromVerse, toChapter, toVerse,
             temp.append(verses[i])
             print(temp)
             temp = []
-        
-        
-
+    
 
 createWorshipServiceSlides('John', '1', '1', '1', '13', 'Average', '28')
