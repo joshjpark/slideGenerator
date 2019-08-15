@@ -1,19 +1,20 @@
 class Presentation:
-    def __init__(self, uuid, pages):
+    def __init__(self, uuid, pages=[]):
         self.uuid = uuid
-        self.pages = pages or []
+        self.pages = pages
 
     # TODO
-    def addPage(self, page):
-        self.pages
+    def addPage(self, page, index=0):
+        self.pages.insert(
+            index, page) if index >= 0 else self.pages.append(page)
 
     # TODO
-    def deletePage(self):
-        return
+    def deletePage(self, index):
+        del self.pages[index]
 
     # TODO
-    def getPage(self):
-        return
+    def getPage(self, index):
+        return self.pages[index]
 
     # TODO
     def exportPresentation(self):

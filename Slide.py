@@ -1,9 +1,12 @@
-class Page:
+import uuid
+
+
+class Slide:
     def __init__(self):
         self.pageElements = []
 
     # TODO
-    def addPageElement(self):
+    def addPageElement(self, properties):
         return
 
     # TODO

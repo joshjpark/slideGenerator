@@ -11,23 +11,26 @@ from apiclient import discovery
 from httplib2 import Http
 from oauth2client import file, client, tools
 
-#generate random, unique UUID string
-gen_uuid = lambda : str(uuid.uuid4()) 
+# generate random, unique UUID string
 
-#obtain read / write authorization
+
+def gen_uuid(): return str(uuid.uuid4())
+
+
+# obtain read / write authorization
 SCOPES = 'https://www.googleapis.com/auth/presentations',
 store = file.Storage('storage.json')
 creds = store.get()
 if not creds or creds.invalid:
     flow = client.flow_from_clientsecrets('client_secret.json', SCOPES)
     creds = tools.run_flow(flow, store)
-#create service end point for the slides API 
-SLIDES = discovery.build('slides', 'v1', http=creds.authorize(Http())) 
+# create service end point for the slides API
+SLIDES = discovery.build('slides', 'v1', http=creds.authorize(Http()))
 
-#create slide start point 
+# create slide start point
 print('** Create new slide deck & set up object IDs')
 rsp = SLIDES.presentations().create(
-        body={'title': 'DEMO SLIDES'}).execute()
+    body={'title': 'DEMO SLIDES'}).execute()
 deckID = rsp['presentationId']      # presentationID from https (url) address
 # titleSlide = rsp['slides'][0]
 # titleID = titleSlide['pageElements'][0]['objectId']
@@ -48,15 +51,15 @@ def createGoodSlideTextFontBackground(phrase, font, size, url):
     send_req = [
         {'createSlide': {
             'objectId': slideNewID
-        }}, 
+        }},
         {
             'createShape': {
-                'objectId' : textBoxID,
+                'objectId': textBoxID,
                 'shapeType': 'TEXT_BOX',
                 'elementProperties': {
                     'pageObjectId': slideNewID,
                     'size': {
-                        'width': {'magnitude': 3000000, 'unit': 'EMU' },
+                        'width': {'magnitude': 3000000, 'unit': 'EMU'},
                         'height': {'magnitude': 3000000, 'unit': 'EMU'}
                     },
                     'transform': {
@@ -70,18 +73,18 @@ def createGoodSlideTextFontBackground(phrase, font, size, url):
             }
         },
         {
-        'insertText': {'objectId': textBoxID, 'text': phrase}
+            'insertText': {'objectId': textBoxID, 'text': phrase}
         },
         {
-        'updateTextStyle': {
-            'objectId': textBoxID,
-            'style': {
-                'fontFamily': font,
-                'fontSize': {'magnitude':size,'unit': 'PT'}
-        },
-            'textRange': {'type': 'FIXED_RANGE', 'startIndex' : 0, 'endIndex': len(phrase)},
-            'fields': 'fontFamily, fontSize'
-        }
+            'updateTextStyle': {
+                'objectId': textBoxID,
+                'style': {
+                    'fontFamily': font,
+                    'fontSize': {'magnitude': size, 'unit': 'PT'}
+                },
+                'textRange': {'type': 'FIXED_RANGE', 'startIndex': 0, 'endIndex': len(phrase)},
+                'fields': 'fontFamily, fontSize'
+            }
         },
         {
             'updatePageProperties': {
@@ -98,9 +101,9 @@ def createGoodSlideTextFontBackground(phrase, font, size, url):
         }
     ]
     SLIDES.presentations().batchUpdate(body={'requests': send_req},
-    presentationId=deckID).execute()
+                                       presentationId=deckID).execute()
 
-    
+
 def createWorshipSlideTextBox(phrase, font, size):
     """create slide with textbox of appropriate size
     Kwargs:
@@ -110,7 +113,7 @@ def createWorshipSlideTextBox(phrase, font, size):
     """
     slideNewID = gen_uuid()
     textBoxID = gen_uuid()
-    
+
     send_req = [
         {'createSlide': {
             'objectId': slideNewID
@@ -131,7 +134,7 @@ def createWorshipSlideTextBox(phrase, font, size):
                         'translateX': 311700,
                         'translateY': 745150,
                         'unit': 'EMU'
-                    }    
+                    }
                 }
             }
         },
@@ -147,7 +150,7 @@ def createWorshipSlideTextBox(phrase, font, size):
                 'objectId': textBoxID,
                 'style': {
                     'fontFamily': font,
-                    'fontSize': {'magnitude': size,'unit': 'PT'}
+                    'fontSize': {'magnitude': size, 'unit': 'PT'}
                 },
                 'textRange': {'type': 'FIXED_RANGE', 'startIndex': 0, 'endIndex': len(phrase)},
                 'fields': 'fontFamily, fontSize',
@@ -162,10 +165,10 @@ def createWorshipSlideTextBox(phrase, font, size):
         }
     ]
     SLIDES.presentations().batchUpdate(body={'requests': send_req},
-    presentationId=deckID).execute()
+                                       presentationId=deckID).execute()
 
 
-def createWorshipServiceSlides(book, fromChapter, fromVerse, toChapter, toVerse, font, size):  
+def createWorshipServiceSlides(book, fromChapter, fromVerse, toChapter, toVerse, font, size):
     """create multiple slides of Bible verses.
     Kwargs: 
     book        -- the book in the Bible to fetch
@@ -185,7 +188,9 @@ def createWorshipServiceSlides(book, fromChapter, fromVerse, toChapter, toVerse,
             createWorshipSlideTextBox(temp[0] + '\n' + temp[1], font, size)
             temp = []
 
+
 createWorshipServiceSlides('John', '12', '12', '12', '19', 'Average', '28')
 
-createGoodSlideTextFontBackground('Hello world', 'Average', '28', 'https://images.unsplash.com/photo-1530688957198-8570b1819eeb?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&w=1000&q=80')
+createGoodSlideTextFontBackground('Hello world', 'Average', '28',
+                                  'https://images.unsplash.com/photo-1530688957198-8570b1819eeb?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&w=1000&q=80')
 print('DONE')

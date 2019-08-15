@@ -3,3 +3,5 @@
 
 # Google API Storage
 storage.json
+
+*.pyc
