@@ -29,9 +29,9 @@ SLIDES = discovery.build('slides', 'v1', http=creds.authorize(Http()))
 
 # create slide start point
 print('** Create new slide deck & set up object IDs')
-rsp = SLIDES.presentations().create(
-    body={'title': 'DEMO SLIDES'}).execute()
-deckID = rsp['presentationId']      # presentationID from https (url) address
+# rsp = SLIDES.presentations().create(
+#     body={'title': 'DEMO SLIDES'}).execute()
+# deckID = rsp['presentationId']      # presentationID from https (url) address
 # titleSlide = rsp['slides'][0]
 # titleID = titleSlide['pageElements'][0]['objectId']
 # subtitleID = titleSlide['pageElements'][1]['objectId']
@@ -189,8 +189,8 @@ def createWorshipServiceSlides(book, fromChapter, fromVerse, toChapter, toVerse,
             temp = []
 
 
-createWorshipServiceSlides('John', '12', '12', '12', '19', 'Average', '28')
+# createWorshipServiceSlides('John', '12', '12', '12', '19', 'Average', '28')
 
-createGoodSlideTextFontBackground('Hello world', 'Average', '28',
-                                  'https://images.unsplash.com/photo-1530688957198-8570b1819eeb?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&w=1000&q=80')
+# createGoodSlideTextFontBackground('Hello world', 'Average', '28',
+#                                   'https://images.unsplash.com/photo-1530688957198-8570b1819eeb?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&w=1000&q=80')
 print('DONE')
