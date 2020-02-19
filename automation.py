@@ -30,6 +30,9 @@ class Slides:
         deckID = rsp['presentationId']
         SLIDES.presentations().batchUpdate()
         # deckID = rsp['presentationId']      # presentationID from https (url) address
+
+    def createVersesSlides(self, fromVerse, toVerse, fromChapter, toChapter):
+        pass
     
     def createSlide(self):
         pass
@@ -38,6 +41,7 @@ class Slides:
     def batchRun(self):
         # run through the array and compile
         pass
+
         
 
 
