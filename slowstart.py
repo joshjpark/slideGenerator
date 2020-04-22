@@ -3,13 +3,13 @@ slideGenerator.py
 Description: Automate the task of generating routine slides using Google Slides API. 
 '''
 
-# from __future__ import print_function
-# import uuid
-# import bib
+from __future__ import print_function
+import uuid
+import bib
 
-# from apiclient import discovery
-# from httplib2 import Http
-# from oauth2client import file, client, tools
+from apiclient import discovery
+from httplib2 import Http
+from oauth2client import file, client, tools
 
 # generate random, unique UUID string
 
@@ -198,3 +198,6 @@ createGoodSlideTextFontBackground('Hello world', 'Average', '28',
 
 createWorshipServiceSlides('Joshua', '1', '6', '2', '13', 'Average', '20')
 print('DONE')
+
+# https://docs.google.com/presentation/d/1L8UCz_Ap54LH4NAY2gRKBeomyxpTAHcOVCeJNnqpMk4/edit?usp=sharing
+
