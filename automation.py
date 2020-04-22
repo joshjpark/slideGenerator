@@ -111,7 +111,80 @@ class Slides:
         ]
         self.SLIDES.presentations().batchUpdate(body={'requests':send_req},
                                         presentationId=self.deckID).execute()
-        
-# slide = Slides("hello")
-# slide.createTitlePage('Hello World', 'Average', '28', 'https://images.unsplash.com/photo-1530688957198-8570b1819eeb?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&w=1000&q=80')
 
+    def createVerses(self, book, fromChapter, fromVerse, toChapter, toVerse, font, size):
+        
+        verses = bib.get_verses(book, fromChapter, fromVerse, toChapter, toVerse)
+        temp = []
+
+        for i in range(len(verses)):
+            if i % 2 == 0:
+                temp.append(verses[i])
+                if i == len(verses)-1:
+                    self.createVerseTextBox(temp[0], font, size)
+            elif i % 2 == 1:
+                temp.append(verses[i])
+                self.createVerseTextBox(temp[0] + '\n\n'+ temp[1], font, size)
+                temp = []
+    
+    # create a series of slides with Bible verses
+    def createVerseTextBox(self, phrase, font, size):
+        slideNewID = gen_uuid()
+        textBoxID = gen_uuid()
+
+        send_req = [
+            {'createSlide': {
+                'objectId': slideNewID
+            }},
+            {
+                'createShape': {
+                    'objectId': textBoxID,
+                    'shapeType': 'TEXT_BOX',
+                    'elementProperties': {
+                        'pageObjectId': slideNewID,
+                        'size': {
+                            'width': {'magnitude': 3000000, 'unit': 'EMU'},
+                            'height': {'magnitude': 3000000, 'unit': 'EMU'}
+                        },
+                        'transform': {
+                            'scaleX': 2.8402,
+                            'scaleY': 1.1388,
+                            'translateX': 311700,
+                            'translateY': 745150,
+                            'unit': 'EMU'
+                        }
+                    }
+                }
+            },
+            {
+                'insertText': {
+                    'objectId': textBoxID,
+                    'insertionIndex': 0,
+                    'text': phrase
+                }
+            },
+            {
+                'updateTextStyle': {
+                    'objectId': textBoxID,
+                    'style': {
+                        'fontFamily': font,
+                        'fontSize': {'magnitude': size, 'unit': 'PT'}
+                    },
+                    'textRange': {'type': 'FIXED_RANGE', 'startIndex': 0, 'endIndex': len(phrase)},
+                    'fields': 'fontFamily, fontSize',
+                }
+            },
+            {
+                'updateParagraphStyle': {
+                    'objectId': textBoxID,
+                    'style': {'lineSpacing': 150},
+                    'fields': 'lineSpacing'
+                }
+            }
+        ]
+        self.SLIDES.presentations().batchUpdate(body={'requests': send_req},
+                                        presentationId=self.deckID).execute()
+        
+slide = Slides("hello")
+slide.createTitlePage('Praise God', 'Average', '28', 'https://images.unsplash.com/photo-1530688957198-8570b1819eeb?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&w=1000&q=80')
+slide.createVerses('Joshua', '1', '6', '2', '13', 'Average', '20')
