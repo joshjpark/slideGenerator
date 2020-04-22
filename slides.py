@@ -42,8 +42,56 @@ class Slides:
         self.SLIDES.presentations().batchUpdate(body={'requests': send_req}, presentationId=self.deckID).execute()
     
     def createTitle(self, date, background):
-        
-        pass
+        slideNewID = gen_uuid()
+        dateboxID = gen_uuid()
+        titleboxID = gen_uuid()
+        iconboxID, icontextID = gen_uuid(), gen_uuid()
+
+        send_req = [
+            {
+                'createSlide' : {'objectId' : slideNewID}
+            }, 
+            {
+                'createShape' : {
+                    'objectId' : titleboxID,
+                    'shapeType' : 'TEXT_BOX',
+                    'elementProperties' : {
+                        'pageObjectId' : slideNewID,
+                        'size' : {
+                            'width' : {'magnitude' : 3000000, 'unit' : 'EMU'},
+                            'height' : {'magnitude' : 3000000, 'unit' : 'EMU'}
+                        },
+                        'transform' : {
+                            'scaleX' : 1.852,
+                            'scaleY' : 0.5697,
+                            'translateX' : 1794000,
+                            'translateY' : 1717200,
+                            'unit' : 'EMU'
+                        }
+                    }
+                }
+            },
+            {
+                'insertText' : {
+                    'objectId' : titleboxID,
+                    'text' : "WORSHIP \n SERVICE"
+                }
+            },
+            {
+                'updateTextStyle' : {
+                    'objectId' : titleboxID,
+                    'style' : {
+                        'fontFamily' : 'Montserrat',
+                        'fontSize' : {'magnitude' : '80', 'unit' : 'PT'},
+                        'bold' : 'true'
+                    },
+                    'textRange' : {'type' : 'FIXED_RANGE', 'startIndex' : 0, 'endIndex' : 18},
+                    'fields' : 'fontFamily, fontSize, bold'
+                }
+            }
+        ]
+
+        self.SLIDES.presentations().batchUpdate(body={'requests': send_req}, presentationId=self.deckID).execute()
     
     def createHymn(self, hymn, title, author, year, background, lyric):
         pass
