@@ -7,7 +7,8 @@ from httplib2 import Http
 from oauth2client import file, client, tools
 
 logoSrc = 'https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcSIrxH8cTa05cnvqh9os30fiB0qRxFRKQXNoY1C1UVwBvwmNVZd&usqp=CAU'
-
+creed = ['Apostles\' Creed','I believe in God the Father Almighty, \nMaker of heaven and earth, and in Jesus Christ, \nHis only Son our Lord, who was conceived by the Holy Spirit,\nSuffered under Pontius Pilate, was crucified, dead and buried; \nHe descended into hell; \nThe third day He rose again from the dead;', 'He ascended into heaven, \nand sitteth on the right hand of god the Father Almighty;\nFrom thence He shall come to judge the quick and the dead.\nI believe in the holy spirit, the holy universal church, the communion of saints, the forgiveness of sins, the resurrection of the body. \nAnd the life everlasting. Amen']
+prayer = ['Lord\'s Prayer','Our Father in heaven,\nHallowed be your name,\nYour kingdom come,\nYour will be done on earth as it is in heaven.\nGive us today our daily bread.\nForgive us our debts, as we also have forgiven our debtors.\n','And lead us not into temptation,\nBut deliver us from the evil one.\nFor yours is the kingdom, and the power,\nand the glory, forever, Amen.']
 def gen_uuid() : return str(uuid.uuid4())
 
 class Slides:  
@@ -303,10 +304,126 @@ class Slides:
         ]
         self.SLIDES.presentations().batchUpdate(body={'requests' : send_req}, presentationId=self.deckID).execute()
 
-    def createApostleCreed(self, background):
-    
-    def createLordsPrayer(self, background):
-        pass
+    def createRecital(self, recital, background):
+        
+        if recital == "Prayer": 
+            recitalVersion = prayer
+        else:
+            recitalVersion = creed
+
+        def helper(recite, i): 
+            
+            slideNewID = gen_uuid()
+            headerID, contentID = gen_uuid(), gen_uuid()
+            
+            send_req = [
+                {
+                    'createSlide' : {'objectId' : slideNewID}
+                },
+                {
+                    'createShape' : {
+                        'objectId' : headerID,
+                        'shapeType' : 'TEXT_BOX',
+                        'elementProperties': {
+                            'pageObjectId' : slideNewID,
+                            'size' : {
+                                'width' : {'magnitude' : 3000000, 'unit' : 'EMU'},
+                                'height' : {'magnitude' : 3000000, 'unit' : 'EMU'}
+                            },
+                            'transform': {
+                                'scaleX' : 2.8402,
+                                'scaleY' : 0.1909,
+                                'translateX' : 311700,
+                                'translateY' : 63475,
+                                'unit' : 'EMU'
+                            }
+                        }
+                    }
+                },
+                {
+                    'insertText' : {'objectId' : headerID, 'text' : recite[0]}
+                },
+                {
+                    'updateTextStyle' : {
+                        'objectId' : headerID,
+                        'style' : {
+                            'fontFamily' : 'Montserrat',
+                            'fontSize' : {'magnitude' : 36, 'unit' : 'PT'},
+                            'bold' : 'true',
+                            'foregroundColor' : {
+                                'opaqueColor' : {
+                                    'rgbColor' : {
+                                        'blue' : 1.0,
+                                        'green' : 1.0,
+                                        'red' : 1.0
+                                    }
+                                }
+                            },
+                        },
+                        'textRange' : {'type' : 'FIXED_RANGE', 'startIndex' : 0, 'endIndex' : len(recite[0])},
+                        'fields' : 'foregroundColor, bold, fontFamily, fontSize'
+                    }
+                },
+                {
+                    'updatePageProperties' : {
+                        'objectId' : slideNewID,
+                        'pageProperties' : {
+                            'pageBackgroundFill' : {
+                                'stretchedPictureFill' : {
+                                    'contentUrl' : background
+                                }
+                            }
+                        },
+                        'fields' : 'pageBackgroundFill'
+                    }
+                },
+                {
+                    'createShape' : {
+                        'objectId' : contentID,
+                        'shapeType' : 'TEXT_BOX',
+                        'elementProperties': {
+                            'pageObjectId' : slideNewID,
+                            'size' : {
+                                'width' : {'magnitude' : 3000000, 'unit' : 'EMU'},
+                                'height' : {'magnitude' : 3000000, 'unit' : 'EMU'}
+                            },
+                            'transform': {
+                                'scaleX' : 3.048,
+                                'scaleY' : 1.4361,
+                                'translateY' : 835075,
+                                'unit' : 'EMU'
+                            }
+                        }
+                    }
+                },
+                {
+                    'insertText' : {'objectId' : contentID, 'text' : recite[i]}
+                }, 
+                {
+                    'updateTextStyle' : {
+                        'objectId' : contentID,
+                        'style' : {
+                            'fontFamily' : 'Arial',
+                            'fontSize' : {'magnitude' : 24, 'unit' : 'PT'},
+                            'foregroundColor' : {
+                                'opaqueColor' : {
+                                    'rgbColor' : {
+                                        'blue' : 1.0,
+                                        'green' : 1.0,
+                                        'red' : 1.0
+                                    }
+                                }
+                            },
+                        },
+                        'textRange' : {'type' : 'FIXED_RANGE', 'startIndex' : 0, 'endIndex' : len(recite[i])},
+                        'fields' : 'foregroundColor, fontFamily, fontSize'
+                    }
+                }
+            ]
+            self.SLIDES.presentations().batchUpdate(body={'requests' : send_req}, presentationId=self.deckID).execute()
+        
+        helper(recitalVersion, 1)
+        helper(recitalVersion, 2)
 
     def createVerses(self, keyVerse, background):
         pass

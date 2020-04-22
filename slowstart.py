@@ -200,4 +200,3 @@ createWorshipServiceSlides('Joshua', '1', '6', '2', '13', 'Average', '20')
 print('DONE')
 
 # https://docs.google.com/presentation/d/1L8UCz_Ap54LH4NAY2gRKBeomyxpTAHcOVCeJNnqpMk4/edit?usp=sharing
-
