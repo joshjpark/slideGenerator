@@ -148,13 +148,6 @@ class Slides:
                     'fields' : 'foregroundColor, fontFamily, fontSize'
                 }
             },
-            # {
-            #     'updateParagraphStyle' : {
-            #         'objectId' : dateboxID,
-            #         'alignment' : 'END'
-            #     }
-            # },
-            # icon text box
             {
                 'createShape' : {
                     'objectId' : icontextID,
@@ -237,12 +230,12 @@ class Slides:
             }
         ]
 
-        self.SLIDES.presentations().batchUpdate(body={'requests': send_req}, presentationId=self.deckID).execute()
+        self.SLIDES.presentations().batchUpdate(body={'requests' : send_req}, presentationId=self.deckID).execute()
     
     def createHymn(self, hymn, title, author, year, background, lyric):
         pass
 
-    def createTransition(self, text, font, size, background):
+    def createTransition(self, text, background):
         slideNewID = gen_uuid()
         textboxID = gen_uuid()
 
@@ -261,10 +254,10 @@ class Slides:
                             'height' : {'magnitude' : 3000000, 'unit' : 'EMU'}
                         },
                         'transform': {
-                            'scaleX' : 2.7492,
-                            'scaleY' : 1.5576,
-                            'translateX' : 448200,
-                            'translateY' : 235350,
+                            'scaleX' : 2.664,
+                            'scaleY' : 0.2755,
+                            'translateX' : 576000,
+                            'translateY' : 3847950,
                             'unit' : 'EMU'
                         }
                     }
@@ -277,11 +270,21 @@ class Slides:
                 'updateTextStyle' : {
                     'objectId' : textboxID,
                     'style' : {
-                        'fontFamily' : font,
-                        'fontSize' : {'magnitude' : size, 'unit' : 'PT'}
+                        'fontFamily' : 'Montserrat',
+                        'fontSize' : {'magnitude' : 40, 'unit' : 'PT'},
+                        'bold' : 'true',
+                        'foregroundColor' : {
+                            'opaqueColor' : {
+                                'rgbColor' : {
+                                    'blue' : 1.0,
+                                    'green' : 1.0,
+                                    'red' : 1.0
+                                }
+                            }
+                        },
                     },
                     'textRange' : {'type' : 'FIXED_RANGE', 'startIndex' : 0, 'endIndex' : len(text)},
-                    'fields' : 'fontFamily, fontSize'
+                    'fields' : 'foregroundColor, bold, fontFamily, fontSize'
                 }
             },
             {
@@ -301,7 +304,6 @@ class Slides:
         self.SLIDES.presentations().batchUpdate(body={'requests' : send_req}, presentationId=self.deckID).execute()
 
     def createApostleCreed(self, background):
-        pass
     
     def createLordsPrayer(self, background):
         pass
