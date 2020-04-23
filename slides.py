@@ -1,6 +1,7 @@
 from __future__ import print_function
 import uuid 
 import bib
+import json
 
 from apiclient import discovery
 from httplib2 import Http
@@ -249,9 +250,6 @@ class Slides:
 
         self.SLIDES.presentations().batchUpdate(body={'requests' : send_req}, presentationId=self.deckID).execute()
     
-    def createHymn(self, hymn, title, author, year, background, lyric):
-        pass
-
     def createTransition(self, text, background):
         slideNewID = gen_uuid()
         textboxID = gen_uuid()
@@ -873,3 +871,95 @@ class Slides:
         versesHelper()
         layoutHelperSubTitle(book, fromChapter, fromVerse, toChapter, toVerse, background)
         versesHelper()
+
+    def createHymn(self, number, title, background):
+
+        def hymnGenerator(hymn):
+            slideNewID = gen_uuid()
+            textboxID = gen_uuid()
+
+            send_req = [
+                {
+                    'createSlide' : {'objectId' : slideNewID}
+                },
+                {
+                    'createShape' : {
+                        'objectId' : textboxID,
+                        'shapeType' : 'TEXT_BOX',
+                        'elementProperties' : {
+                            'pageObjectId' : slideNewID,
+                            'size' : {
+                                'width' : {'magnitude' : 3000000, 'unit' : 'EMU'},
+                                'height' : {'magnitude' : 3000000, 'unit' : 'EMU'}
+                            },
+                            'transform' : {
+                                'scaleX' : 3.048,
+                                'scaleY' : 1.7063,
+                                'translateX' : -15900,
+                                'translateY' : 24600,
+                                'unit' : 'EMU' 
+                            }
+                        }
+                    }
+                }, 
+                {
+                    'insertText' : {'objectId' : textboxID, 'text' : hymn}
+                },
+                {
+                    'updateTextStyle' : {
+                        'objectId' : textboxID,
+                        'style' : {
+                            'fontFamily' : 'Arial',
+                            'fontSize' : {'magnitude' : 28, 'unit' : 'PT'},
+                            'foregroundColor' : {
+                                'opaqueColor' : {
+                                    'rgbColor' : {
+                                        'blue' : 1.0,
+                                        'green' : 1.0,
+                                        'red' : 1.0
+                                    }
+                                }
+                            }
+                        },
+                        'textRange' : {'type' : "ALL"},
+                        'fields' : 'foregroundColor, fontFamily, fontSize'
+                    }
+                },
+                {
+                    'updateParagraphStyle' : {
+                        'objectId' : textboxID,
+                        'style' : {'alignment' : 'CENTER'},
+                        'fields' : 'alignment'
+                    }
+                },
+                {
+                    'updatePageProperties' : {
+                        'objectId' : slideNewID,
+                        'pageProperties' : {
+                            'pageBackgroundFill' : {
+                                'stretchedPictureFill' : {
+                                    'contentUrl' : background
+                                }
+                            }
+                        },
+                        'fields' : 'pageBackgroundFill'
+                    }
+                }
+            ]
+            self.SLIDES.presentations().batchUpdate(body={'requests' : send_req}, presentationId=self.deckID).execute()
+        
+        # if 0, unnumbered. Else, numbered hymn
+        f = open('./hymn_unnumbered.json') if number == 0 else open('./hymn_numbered.json')
+        loadedJson = json.load(f)
+
+        # search lyrics of given hymn
+        def searchLyrics(hymns, num):
+            for hymn in hymns:
+                if hymn['hymnNumber'] == num:
+                    return hymn['lyrics']
+        
+        foundLyric = searchLyrics(loadedJson, 9)
+
+        for lyric in foundLyric:
+            hymnGenerator(lyric)
+        
