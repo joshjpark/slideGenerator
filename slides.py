@@ -487,7 +487,7 @@ class Slides:
             self.SLIDES.presentations().batchUpdate(body={'requests': send_req},
                                             presentationId=self.deckID).execute()
 
-        # first title layout 
+        # main title layout 
         def layoutHelperTitle(book, fromChapter, fromVerse, toChapter, toVerse, background):
             
             slideNewID = gen_uuid()
@@ -614,8 +614,185 @@ class Slides:
             # add background page and turn them into white characters
             self.SLIDES.presentations().batchUpdate(body={'requests': send_req},
                                             presentationId=self.deckID).execute()
-                    
         
+        # sub title layout
+        def layoutHelperSubTitle(book, fromChapter, fromVerse, toChapter, toVerse, background):
+            slideNewID = gen_uuid()
+            subtitleID, rangeVerseID, verseKeyID = gen_uuid(), gen_uuid(), gen_uuid()
+
+            toFromHeader = book + " " + fromChapter + ":" + fromVerse + "-" + toVerse + "\nKey verse" + \
+                + "Key Verse: " if (fromChapter == toChapter) else book + " " + fromChapter + ":" \
+                    + fromVerse + "-" + toChapter + ":" + toVerse + "\n"
+            
+            send_req = [
+                {
+                    'createSlide' : {
+                        'objectId' : slideNewID
+                    }
+                },
+                # title header
+                {
+                    'createShape' : {
+                        'objectId' : subtitleID,
+                        'shapeType' : 'TEXT_BOX',
+                        'elementProperties' : {
+                            'pageObjectId' : slideNewID,
+                            'size' : {
+                                'width' : {'magnitude' : 3000000, 'unit' : 'EMU'},
+                                'height' : {'magnitude' : 3000000, 'unit' : 'EMU'}
+                            },
+                            'transform' : {
+                                'scaleX' : 3.048,
+                                'scaleY' : 0.2755,
+                                'translateX' : -50,
+                                'translateY' : 208275,
+                                'unit' : 'EMU'
+                            }
+                        }
+                    }
+                },
+                {
+                    'insertText' : {
+                        'objectId' : subtitleID, 
+                        'insertionIndex' : 0,
+                        'text' : 'Test'
+                    }
+                },
+                {
+                    'updateTextStyle' : {
+                        'objectId' : subtitleID,
+                        'style' : {
+                            'fontFamily' : 'Monstserrat',
+                            'fontSize' : {'magnitude' : '40', 'unit' : 'PT'},
+                            'foregroundColor' : {
+                                'opaqueColor' : {
+                                    'rgbColor' : {
+                                        'blue' : 1.0,
+                                        'green' : 1.0,
+                                        'red' : 1.0
+                                    }
+                                }
+                            },
+                            'bold' : 'true'
+                        },
+                        'textRange' : {'type' : 'ALL'},
+                        'fields' : 'foregroundColor, bold, fontFamily, fontSize'
+                    }
+                },
+                # range of verses header
+                {
+                    'createShape' : {
+                        'objectId' : rangeVerseID,
+                        'shapeType' : 'TEXT_BOX',
+                        'elementProperties' : {
+                            'pageObjectId' : slideNewID,
+                            'size' : {
+                                'width' : {'magnitude' : 3000000, 'unit' : 'EMU'},
+                                'height' : {'magnitude' : 3000000, 'unit' : 'EMU'}
+                            },
+                            'transform' : {
+                                'scaleX' : 1.2187,
+                                'scaleY' : 0.3393,
+                                'translateX' : 618775,
+                                'translateY' : 1034775,
+                                'unit' : 'EMU'
+                            }
+                        }
+                    }
+                },
+                {
+                    'insertText' : {
+                        'objectId' : rangeVerseID,
+                        'insertionIndex' : 0,
+                        'text' : toFromHeader
+                    }
+                },
+                {
+                    'updateTextStyle' : {
+                        'objectId' : rangeVerseID,
+                        'style' : {
+                            'fontFamily' : 'Arial',
+                            'fontSize' : {'magnitude' : '20', 'unit' : 'PT'},
+                            'foregroundColor' : {
+                                'opaqueColor' : {
+                                    'rgbColor' : {
+                                        'blue' : 1.0,
+                                        'green' : 1.0,
+                                        'red' : 1.0
+                                    }
+                                }
+                            },
+                        },
+                        'textRange' : {'type' : 'FIXED_RANGE', 'startIndex' : 0, 'endIndex' : len(toFromHeader)},
+                        'fields' : 'foregroundColor, fontFamily, fontSize'
+                    }
+                },
+                # key verse box
+                {
+                    'createShape' : {
+                        'objectId' : verseKeyID,
+                        'shapeType' : 'TEXT_BOX',
+                        'elementProperties' : {
+                            'pageObjectId' : slideNewID,
+                            'size' : {
+                                'width' : {'magnitude' : 3000000, 'unit' : 'EMU'},
+                                'height' : {'magnitude' : 3000000, 'unit' : 'EMU'}
+                            },
+                            'transform' : {
+                                'scaleX' : 2.5867,
+                                'scaleY' : 0.3393,
+                                'translateX' : 691900,
+                                'translateY' : 3620350,
+                                'unit' : 'EMU'
+                            }
+                        }
+                    }
+                },
+                {
+                    'insertText' : {
+                        'objectId' : verseKeyID,
+                        'insertionIndex' : 0,
+                        'text' : "Testing key verse"
+                    }
+                },
+                {
+                    'updateTextStyle' : {
+                        'objectId' : verseKeyID,
+                        'style' : {
+                            'fontFamily' : 'Arial',
+                            'fontSize' : {'magnitude' : '20', 'unit' : 'PT'},
+                            'foregroundColor' : {
+                                'opaqueColor' : {
+                                    'rgbColor' : {
+                                        'blue' : 1.0,
+                                        'green' : 1.0,
+                                        'red' : 1.0
+                                    }
+                                }
+                            },
+                        },
+                        'textRange' : {'type' : 'ALL'},
+                        'fields' : 'foregroundColor, fontFamily, fontSize'
+                    }
+                },
+                {
+                    'updatePageProperties' : {
+                        'objectId' : slideNewID,
+                        'pageProperties' : {
+                            'pageBackgroundFill' : {
+                                'stretchedPictureFill' : {
+                                    'contentUrl' : background
+                                }
+                            }
+                        },
+                        'fields' : 'pageBackgroundFill'
+                    }
+                }
+            ]
+            self.SLIDES.presentations().batchUpdate(body={'requests': send_req},
+                                            presentationId=self.deckID).execute()
+
+
         # logic for verses print
         def versesHelper():
             verses = bib.getVerses(book, fromChapter, fromVerse, toChapter, toVerse)
@@ -633,8 +810,5 @@ class Slides:
         
         layoutHelperTitle(book, fromChapter, fromVerse, toChapter, toVerse, background)
         versesHelper()
-
-        
-        
-
-
+        layoutHelperSubTitle(book, fromChapter, fromVerse, toChapter, toVerse, background)
+        versesHelper()

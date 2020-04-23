@@ -32,3 +32,4 @@ def getVerses(book, fromChapter, fromVerse, toChapter, toVerse):
 					result.append(str(i) + " " + data[book][str(chapter)][str(i)])
 	
 	return result
+
