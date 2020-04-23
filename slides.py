@@ -874,6 +874,123 @@ class Slides:
 
     def createHymn(self, number, title, background):
 
+
+        def hymnMainPageGenerator(json, background):
+            number, title, author, year = json['hymnNumber'], json['title'], json['author'], json['year']
+            
+            slideNewID = gen_uuid()
+            mainTextboxID = gen_uuid()
+            subTextboxID = gen_uuid()
+
+            send_req = [
+                {
+                    'createSlide' : {'objectId' : slideNewID}
+                },
+                {
+                    'createShape' : {
+                        'objectId' : mainTextboxID,
+                        'shapeType' : 'TEXT_BOX',
+                        'elementProperties' : {
+                            'pageObjectId' : slideNewID,
+                            'size' : {
+                                'width' : {'magnitude' : 3000000, 'unit' : 'EMU'},
+                                'height' : {'magnitude' : 3000000, 'unit' : 'EMU'}
+                            },
+                            'transform' : {
+                                'scaleX' : 2.664,
+                                'scaleY' : 0.2755,
+                                'translateX' : 576000,
+                                'translateY' : 3619350,
+                                'unit' : 'EMU' 
+                            }
+                        }
+                    }
+                },
+                {
+                    'insertText' : {'objectId' : mainTextboxID, 'text' : str(number) + " " + title}
+                },
+                {
+                    'updateTextStyle' : {
+                        'objectId' : mainTextboxID,
+                        'style' : {
+                            'fontFamily' : 'Montserrat',
+                            'fontSize' : {'magnitude' : 40, 'unit' : 'PT'},
+                            'bold' : 'true',
+                            'foregroundColor' : {
+                                'opaqueColor' : {
+                                    'rgbColor' : {
+                                        'blue' : 1.0,
+                                        'green' : 1.0,
+                                        'red' : 1.0
+                                    }
+                                }
+                            }
+                        },
+                        'textRange' : {'type' : 'ALL'},
+                        'fields' : 'foregroundColor, bold, fontFamily, fontSize'
+                    }
+                },
+                {
+                    'createShape' : {
+                        'objectId' : subTextboxID,
+                        'shapeType' : 'TEXT_BOX',
+                        'elementProperties': {
+                            'pageObjectId' : slideNewID,
+                            'size' : {
+                                'width' : {'magnitude' : 3000000, 'unit' : 'EMU'},
+                                'height' : {'magnitude' : 3000000, 'unit' : 'EMU'}
+                            },
+                            'transform': {
+                                'scaleX' : 1.5326,
+                                'scaleY' : 0.1792,
+                                'translateX' : 576000,
+                                'translateY' : 4233150,
+                                'unit' : 'EMU'
+                            }
+                        }
+                    }
+                },
+                {
+                    'insertText' : {'objectId' : subTextboxID, 'text' : author + ", " + str(year)}
+                },
+                {
+                    'updateTextStyle' : {
+                        'objectId' : subTextboxID,
+                        'style' : {
+                            'fontFamily' : 'Montserrat',
+                            'fontSize' : {'magnitude' : 20, 'unit' : 'PT'},
+                            'foregroundColor' : {
+                                'opaqueColor' : {
+                                    'rgbColor' : {
+                                        'blue' : 1.0,
+                                        'green' : 1.0,
+                                        'red' : 1.0
+                                    }
+                                }
+                            }
+                        },
+                        'textRange' : {'type' : 'ALL'},
+                        'fields' : 'foregroundColor, fontFamily, fontSize'
+                    }
+                },
+                {
+                    'updatePageProperties' : {
+                        'objectId' : slideNewID,
+                        'pageProperties' : {
+                            'pageBackgroundFill' : {
+                                'stretchedPictureFill' : {
+                                    'contentUrl' : background
+                                }
+                            }
+                        },
+                        'fields' : 'pageBackgroundFill'
+                    }
+                }
+            ]
+            self.SLIDES.presentations().batchUpdate(body={'requests' : send_req}, presentationId=self.deckID).execute()
+
+
+
         def hymnGenerator(hymn):
             slideNewID = gen_uuid()
             textboxID = gen_uuid()
@@ -948,18 +1065,27 @@ class Slides:
             ]
             self.SLIDES.presentations().batchUpdate(body={'requests' : send_req}, presentationId=self.deckID).execute()
         
-        # if 0, unnumbered. Else, numbered hymn
-        f = open('./hymn_unnumbered.json') if number == 0 else open('./hymn_numbered.json')
-        loadedJson = json.load(f)
-
         # search lyrics of given hymn
         def searchLyrics(hymns, num):
             for hymn in hymns:
                 if hymn['hymnNumber'] == num:
                     return hymn['lyrics']
-        
+
+        # search hymn obj
+        def searchHymn(hymns, num):
+            for hymn in hymns:
+                if hymn['hymnNumber'] == num:
+                    return hymn
+
+        # open file and fetch file
+        f = open('./hymn_unnumbered.json') if number == 0 else open('./hymn_numbered.json')
+        loadedJson = json.load(f)
+
+        foundHymn = searchHymn(loadedJson, number)
+        hymnMainPageGenerator(foundHymn, background)
         foundLyric = searchLyrics(loadedJson, 9)
 
         for lyric in foundLyric:
             hymnGenerator(lyric)
+
         
