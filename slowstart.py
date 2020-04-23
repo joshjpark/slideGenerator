@@ -200,3 +200,71 @@ createWorshipServiceSlides('Joshua', '1', '6', '2', '13', 'Average', '20')
 print('DONE')
 
 # https://docs.google.com/presentation/d/1L8UCz_Ap54LH4NAY2gRKBeomyxpTAHcOVCeJNnqpMk4/edit?usp=sharing
+
+
+    def createTransition(self, text, background):
+        slideNewID = gen_uuid()
+        textboxID = gen_uuid()
+
+        send_req = [
+            {
+                'createSlide' : {'objectId' : slideNewID}
+            },
+            {
+                'createShape' : {
+                    'objectId' : textboxID,
+                    'shapeType' : 'TEXT_BOX',
+                    'elementProperties': {
+                        'pageObjectId' : slideNewID,
+                        'size' : {
+                            'width' : {'magnitude' : 3000000, 'unit' : 'EMU'},
+                            'height' : {'magnitude' : 3000000, 'unit' : 'EMU'}
+                        },
+                        'transform': {
+                            'scaleX' : 2.664,
+                            'scaleY' : 0.2755,
+                            'translateX' : 576000,
+                            'translateY' : 3847950,
+                            'unit' : 'EMU'
+                        }
+                    }
+                }
+            },
+            {
+                'insertText' : {'objectId' : textboxID, 'text' : text}
+            },
+            {
+                'updateTextStyle' : {
+                    'objectId' : textboxID,
+                    'style' : {
+                        'fontFamily' : 'Montserrat',
+                        'fontSize' : {'magnitude' : 40, 'unit' : 'PT'},
+                        'bold' : 'true',
+                        'foregroundColor' : {
+                            'opaqueColor' : {
+                                'rgbColor' : {
+                                    'blue' : 1.0,
+                                    'green' : 1.0,
+                                    'red' : 1.0
+                                }
+                            }
+                        },
+                    },
+                    'textRange' : {'type' : 'FIXED_RANGE', 'startIndex' : 0, 'endIndex' : len(text)},
+                    'fields' : 'foregroundColor, bold, fontFamily, fontSize'
+                }
+            },
+            {
+                'updatePageProperties' : {
+                    'objectId' : slideNewID,
+                    'pageProperties' : {
+                        'pageBackgroundFill' : {
+                            'stretchedPictureFill' : {
+                                'contentUrl' : background
+                            }
+                        }
+                    },
+                    'fields' : 'pageBackgroundFill'
+                }
+            }
+        ]
