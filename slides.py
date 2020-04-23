@@ -103,6 +103,13 @@ class Slides:
                     'fields' : 'foregroundColor, fontFamily, fontSize, bold'
                 }
             },
+            {
+                'updateParagraphStyle' : {
+                    'objectId' : titleboxID,
+                    'style' : {'lineSpacing' : 90},
+                    'fields' : 'lineSpacing'
+                }
+            },
             # date box 
             {
                 'createShape' : {
@@ -148,6 +155,13 @@ class Slides:
                     },
                     'textRange' : {'type' : 'ALL'},
                     'fields' : 'foregroundColor, fontFamily, fontSize'
+                }
+            },
+            {
+                'updateParagraphStyle' : {
+                    'objectId' : dateboxID,
+                    'style' : {'alignment' : 'END'},
+                    'fields' : 'alignment'
                 }
             },
             # icon text
@@ -519,6 +533,7 @@ class Slides:
                 {'createSlide' : {
                     'objectId' : slideNewID
                 }},
+                # primary header box
                 {
                     'createShape' : {
                         'objectId' : textboxID,
@@ -568,6 +583,14 @@ class Slides:
                     }
                 },
                 {
+                  'updateParagraphStyle' : {
+                      'objectId' : textboxID, 
+                      'style' : {'alignment' : 'CENTER'},
+                      'fields' : 'alignment'
+                  }  
+                },
+                # primary subtext box 
+                {
                     'createShape' : {
                         'objectId' : subtextboxID,
                         'shapeType' : 'TEXT_BOX',
@@ -615,6 +638,13 @@ class Slides:
                     }
                 }, 
                 {
+                    'updateParagraphStyle' : {
+                        'objectId' : subtextboxID,
+                        'style' : {'alignment' : 'CENTER'},
+                        'fields' : 'alignment'
+                    }
+                },
+                {
                     'updatePageProperties' : {
                         'objectId' : slideNewID,
                         'pageProperties' : {
@@ -647,7 +677,7 @@ class Slides:
                         'objectId' : slideNewID
                     }
                 },
-                # title header
+                # secondary header box
                 {
                     'createShape' : {
                         'objectId' : subtitleID,
@@ -694,6 +724,13 @@ class Slides:
                         },
                         'textRange' : {'type' : 'ALL'},
                         'fields' : 'foregroundColor, bold, fontFamily, fontSize'
+                    }
+                },
+                {
+                    'updateParagraphStyle' : {
+                        'objectId' : subtitleID,
+                        'style' : {'alignment' : 'CENTER'},
+                        'fields' : 'alignment'
                     }
                 },
                 # range of verses header
@@ -790,6 +827,13 @@ class Slides:
                         },
                         'textRange' : {'type' : 'ALL'},
                         'fields' : 'foregroundColor, fontFamily, fontSize'
+                    }
+                },
+                {
+                    'updateParagraphStyle' : {
+                        'objectId' : verseKeyID,
+                        'style' : {'alignment' : 'CENTER'},
+                        'fields' : 'alignment'
                     }
                 },
                 {
