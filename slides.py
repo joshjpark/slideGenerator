@@ -456,7 +456,7 @@ class Slides:
         helper(recitalVersion, 1)
         helper(recitalVersion, 2)
 
-    def createVerses(self, book, fromChapter, fromVerse, toChapter, toVerse, background): #keyVerse, background):
+    def createVerses(self, book, fromChapter, fromVerse, toChapter, toVerse, primaryBackground, secondaryBackground): #keyVerse, background):
         
         # layout for verses
         def layoutHelper(phrase):
@@ -517,7 +517,7 @@ class Slides:
                                             presentationId=self.deckID).execute()
 
         # main title layout 
-        def layoutHelperTitle(book, fromChapter, fromVerse, toChapter, toVerse, background):
+        def layoutHelperTitle(book, fromChapter, fromVerse, toChapter, toVerse, primaryBackground):
             
             slideNewID = gen_uuid()
             textboxID = gen_uuid()
@@ -648,7 +648,7 @@ class Slides:
                         'pageProperties' : {
                             'pageBackgroundFill' : {
                                 'stretchedPictureFill' : {
-                                    'contentUrl' : background
+                                    'contentUrl' : primaryBackground
                                 }
                             }
                         },
@@ -661,7 +661,7 @@ class Slides:
                                             presentationId=self.deckID).execute()
         
         # sub title layout
-        def layoutHelperSubTitle(book, fromChapter, fromVerse, toChapter, toVerse, background):
+        def layoutHelperSubTitle(book, fromChapter, fromVerse, toChapter, toVerse, secondaryBackground):
             slideNewID = gen_uuid()
             subtitleID, rangeVerseID, verseKeyID = gen_uuid(), gen_uuid(), gen_uuid()
 
@@ -840,7 +840,7 @@ class Slides:
                         'pageProperties' : {
                             'pageBackgroundFill' : {
                                 'stretchedPictureFill' : {
-                                    'contentUrl' : background
+                                    'contentUrl' : secondaryBackground
                                 }
                             }
                         },
@@ -853,7 +853,7 @@ class Slides:
 
 
         # logic for verses print
-        def versesHelper():
+        def versesGenerator():
             verses = bib.getVerses(book, fromChapter, fromVerse, toChapter, toVerse)
             result = []
 
@@ -867,10 +867,10 @@ class Slides:
                     layoutHelper(result[0] + '\n' + result[1])
                     result = []
         
-        layoutHelperTitle(book, fromChapter, fromVerse, toChapter, toVerse, background)
-        versesHelper()
-        layoutHelperSubTitle(book, fromChapter, fromVerse, toChapter, toVerse, background)
-        versesHelper()
+        layoutHelperTitle(book, fromChapter, fromVerse, toChapter, toVerse, primaryBackground)
+        versesGenerator()
+        layoutHelperSubTitle(book, fromChapter, fromVerse, toChapter, toVerse, secondaryBackground)
+        versesGenerator()
 
     def createHymn(self, number, title, background):
 

@@ -6,7 +6,7 @@ sn.createTransition('Silent Prayer', 'https://images.unsplash.com/photo-15306889
 sn.createRecital('Prayer','https://images.unsplash.com/photo-1530688957198-8570b1819eeb?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&w=1000&q=80')
 sn.createRecital('Creed','https://images.unsplash.com/photo-1530688957198-8570b1819eeb?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&w=1000&q=80')
 
-sn.createVerses('Joshua', '1', '6', '2', '6', 'https://images.unsplash.com/photo-1530688957198-8570b1819eeb?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&w=1000&q=80')
+sn.createVerses('Joshua', '1', '6', '2', '6', 'https://images.unsplash.com/photo-1530688957198-8570b1819eeb?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&w=1000&q=80', 'https://upload.wikimedia.org/wikipedia/commons/e/e0/Clouds_over_the_Atlantic_Ocean.jpg')
 # sn.createLordsPrayer()
 
 sn.createHymn(9,2,'https://images.unsplash.com/photo-1530688957198-8570b1819eeb?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&w=1000&q=80')
