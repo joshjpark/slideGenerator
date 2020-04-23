@@ -456,7 +456,7 @@ class Slides:
         helper(recitalVersion, 1)
         helper(recitalVersion, 2)
 
-    def createVerses(self, book, fromChapter, fromVerse, toChapter, toVerse, primaryBackground, secondaryBackground): #keyVerse, background):
+    def createVerses(self, book, fromChapter, fromVerse, toChapter, toVerse, keyChapter, keyVerse, messageTitle, primaryBackground, secondaryBackground): #keyVerse, background):
         
         # layout for verses
         def layoutHelper(phrase):
@@ -661,7 +661,7 @@ class Slides:
                                             presentationId=self.deckID).execute()
         
         # sub title layout
-        def layoutHelperSubTitle(book, fromChapter, fromVerse, toChapter, toVerse, secondaryBackground):
+        def layoutHelperSubTitle(book, fromChapter, fromVerse, toChapter, toVerse, keyVerseText,secondaryBackground):
             slideNewID = gen_uuid()
             subtitleID, rangeVerseID, verseKeyID = gen_uuid(), gen_uuid(), gen_uuid()
 
@@ -700,7 +700,7 @@ class Slides:
                     'insertText' : {
                         'objectId' : subtitleID, 
                         'insertionIndex' : 0,
-                        'text' : 'Test'
+                        'text' : messageTitle,
                     }
                 },
                 {
@@ -804,7 +804,7 @@ class Slides:
                     'insertText' : {
                         'objectId' : verseKeyID,
                         'insertionIndex' : 0,
-                        'text' : "Testing key verse"
+                        'text' : keyVerseText,
                     }
                 },
                 {
@@ -867,9 +867,14 @@ class Slides:
                     layoutHelper(result[0] + '\n' + result[1])
                     result = []
         
+        # logic for finding verse
+        def verseFinder(book, chapter, verse):
+            with open('bible.json') as jsonFile:
+                return json.load(jsonFile)[book][keyChapter][keyVerse].strip('\'\"')
+        
         layoutHelperTitle(book, fromChapter, fromVerse, toChapter, toVerse, primaryBackground)
         versesGenerator()
-        layoutHelperSubTitle(book, fromChapter, fromVerse, toChapter, toVerse, secondaryBackground)
+        layoutHelperSubTitle(book, fromChapter, fromVerse, toChapter, toVerse, verseFinder(book, keyChapter, keyVerse), secondaryBackground)
         versesGenerator()
 
     def createHymn(self, number, title, background):
@@ -1018,7 +1023,7 @@ class Slides:
                             }
                         }
                     }
-                }, 
+                },
                 {
                     'insertText' : {'objectId' : textboxID, 'text' : hymn}
                 },
