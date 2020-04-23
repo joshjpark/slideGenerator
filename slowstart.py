@@ -201,70 +201,63 @@ print('DONE')
 
 # https://docs.google.com/presentation/d/1L8UCz_Ap54LH4NAY2gRKBeomyxpTAHcOVCeJNnqpMk4/edit?usp=sharing
 
-
-    def createTransition(self, text, background):
-        slideNewID = gen_uuid()
-        textboxID = gen_uuid()
-
-        send_req = [
-            {
-                'createSlide' : {'objectId' : slideNewID}
-            },
-            {
-                'createShape' : {
-                    'objectId' : textboxID,
-                    'shapeType' : 'TEXT_BOX',
-                    'elementProperties': {
-                        'pageObjectId' : slideNewID,
-                        'size' : {
-                            'width' : {'magnitude' : 3000000, 'unit' : 'EMU'},
-                            'height' : {'magnitude' : 3000000, 'unit' : 'EMU'}
-                        },
-                        'transform': {
-                            'scaleX' : 2.664,
-                            'scaleY' : 0.2755,
-                            'translateX' : 576000,
-                            'translateY' : 3847950,
-                            'unit' : 'EMU'
+            send_req = [
+                {'createSlide' : {
+                    'objectId' : slideNewID
+                }},
+                {
+                    'createShape' : {
+                        'objectId' : textboxID,
+                        'shapeType' : 'TEXT_BOX',
+                        'elementProperties' : {
+                            'pageObjectId' : slideNewID,
+                            'size' : {
+                                'width' : {'magnitude' : 3000000, 'unit' : 'EMU'},
+                                'height' : {'magnitude' : 3000000, 'unit' : 'EMU'}
+                            },
+                            'transform' : {
+                                'scaleX' : 2.8402,
+                                'scaleY' : 1.7145,
+                                'translateX' : 311700,
+                                'unit' : 'EMU'
+                            }
                         }
                     }
-                }
-            },
-            {
-                'insertText' : {'objectId' : textboxID, 'text' : text}
-            },
-            {
-                'updateTextStyle' : {
-                    'objectId' : textboxID,
-                    'style' : {
-                        'fontFamily' : 'Montserrat',
-                        'fontSize' : {'magnitude' : 40, 'unit' : 'PT'},
-                        'bold' : 'true',
-                        'foregroundColor' : {
-                            'opaqueColor' : {
-                                'rgbColor' : {
-                                    'blue' : 1.0,
-                                    'green' : 1.0,
-                                    'red' : 1.0
-                                }
-                            }
+                },
+                {
+                    'insertText' : {
+                        'objectId' : textboxID,
+                        'insertionIndex' : 0,
+                        'text' : phrase
+                    }
+                },
+                {
+                    'updateTextStyle' : {
+                        'objectId' : textboxID,
+                        'style' : {
+                            'fontFamily' : 'Average',
+                            'fontSize' : {'magnitude' : '28', 'unit' : 'PT'}
                         },
-                    },
-                    'textRange' : {'type' : 'FIXED_RANGE', 'startIndex' : 0, 'endIndex' : len(text)},
-                    'fields' : 'foregroundColor, bold, fontFamily, fontSize'
+                        'textRange' : {'type': 'FIXED_RANGE', 'startIndex' : 0, 'endIndex': len(phrase)},
+                        'fields' : 'fontFamily, fontSize',
+                    }
+                },
+                {
+                    'updateParagraphStyle' : {
+                        'objectId' : textboxID,
+                        'style' : {'lineSpacing': 150},
+                        'fields' : 'lineSpacing'
+                    }
                 }
-            },
-            {
-                'updatePageProperties' : {
-                    'objectId' : slideNewID,
-                    'pageProperties' : {
-                        'pageBackgroundFill' : {
-                            'stretchedPictureFill' : {
-                                'contentUrl' : background
-                            }
-                        }
-                    },
-                    'fields' : 'pageBackgroundFill'
+            ]
+
+-----------------------------------------------------------------------------------
+                {
+                    'updateParagraphStyle' : {
+                        'objectId' : textboxID,
+                        'style' : {'lineSpacing': 150},
+                        'fields' : 'lineSpacing'
+                    }
                 }
-            }
-        ]
+
+# we need to: center it, and give it line space 1.5 

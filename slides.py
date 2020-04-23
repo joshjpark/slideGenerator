@@ -7,7 +7,7 @@ from httplib2 import Http
 from oauth2client import file, client, tools
 
 logoSrc = 'https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcSIrxH8cTa05cnvqh9os30fiB0qRxFRKQXNoY1C1UVwBvwmNVZd&usqp=CAU'
-creed = ['Apostles\' Creed','I believe in God the Father Almighty, \nMaker of heaven and earth, and in Jesus Christ, \nHis only Son our Lord, who was conceived by the Holy Spirit,\nSuffered under Pontius Pilate, was crucified, dead and buried; \nHe descended into hell; \nThe third day He rose again from the dead;', 'He ascended into heaven, \nand sitteth on the right hand of god the Father Almighty;\nFrom thence He shall come to judge the quick and the dead.\nI believe in the holy spirit, the holy universal church, the communion of saints, the forgiveness of sins, the resurrection of the body. \nAnd the life everlasting. Amen']
+creed = ['Apostles\' Creed','I believe in God the Father Almighty, \nMaker of heaven and earth, and in Jesus Christ, \nHis only Son our Lord, who was conceived by the Holy Spirit, born of the Virgin Mary,\nSuffered under Pontius Pilate, was crucified, dead, and buried; \nHe descended into hell; \nThe third day He rose again from the dead;', 'He ascended into heaven, \nand sitteth on the right hand of god the Father Almighty;\nFrom thence He shall come to judge the quick and the dead.\nI believe in the holy spirit, the holy universal church, the communion of saints, the forgiveness of sins, the resurrection of the body. \nAnd the life everlasting. Amen']
 prayer = ['Lord\'s Prayer','Our Father in heaven,\nHallowed be your name,\nYour kingdom come,\nYour will be done on earth as it is in heaven.\nGive us today our daily bread.\nForgive us our debts, as we also have forgiven our debtors.\n','And lead us not into temptation,\nBut deliver us from the evil one.\nFor yours is the kingdom, and the power,\nand the glory, forever, Amen.']
 
 def gen_uuid() : return str(uuid.uuid4())
@@ -367,6 +367,13 @@ class Slides:
                     }
                 },
                 {
+                    'updateParagraphStyle' : {
+                        'objectId' : headerID,
+                        'style' : {'alignment' : 'CENTER'},
+                        'fields' : 'alignment'
+                    }
+                },
+                {
                     'updatePageProperties' : {
                         'objectId' : slideNewID,
                         'pageProperties' : {
@@ -419,6 +426,16 @@ class Slides:
                         },
                         'textRange' : {'type' : 'FIXED_RANGE', 'startIndex' : 0, 'endIndex' : len(recite[i])},
                         'fields' : 'foregroundColor, fontFamily, fontSize'
+                    }
+                },
+                {
+                    'updateParagraphStyle': {
+                        'objectId' : contentID,
+                        'style' : {
+                            'lineSpacing' : 150,
+                            'alignment' : 'CENTER', 
+                            },
+                        'fields' : 'alignment , lineSpacing'
                     }
                 }
             ]
