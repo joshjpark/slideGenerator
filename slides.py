@@ -427,9 +427,10 @@ class Slides:
         helper(recitalVersion, 1)
         helper(recitalVersion, 2)
 
-    def createVerses(self, book, fromChapter, fromVerse, toChapter, toVerse): #keyVerse, background):
+    def createVerses(self, book, fromChapter, fromVerse, toChapter, toVerse, background): #keyVerse, background):
         
-        def helper(phrase):
+        # layout for verses
+        def layoutHelper(phrase):
 
             slideNewID = gen_uuid()
             textboxID = gen_uuid()
@@ -485,17 +486,155 @@ class Slides:
             ]
             self.SLIDES.presentations().batchUpdate(body={'requests': send_req},
                                             presentationId=self.deckID).execute()
-        
-        verses = bib.getVerses(book, fromChapter, fromVerse, toChapter, toVerse)
-        result = []
 
-        for i in range(len(verses)):
-            if i % 2 == 0:
-                result.append(verses[i])
-                if i == len(verses) - 1:
-                    helper(result[0])
-            elif i % 2 == 1:
-                result.append(verses[i])
-                helper(result[0] + '\n' + result[1])
-                result = []
+        # first title layout 
+        def layoutHelperTitle(book, fromChapter, fromVerse, toChapter, toVerse, background):
+            
+            slideNewID = gen_uuid()
+            textboxID = gen_uuid()
+            subtextboxID = gen_uuid()
+            
+            toFromHeader = book + " " + fromChapter + ":" + fromVerse + "-" + toVerse + "\nKey verse" + \
+                + "Key Verse: " if (fromChapter == toChapter) else book + " " + fromChapter + ":" \
+                    + fromVerse + "-" + toChapter + ":" + toVerse + "\n"
+                    
+            send_req = [
+                {'createSlide' : {
+                    'objectId' : slideNewID
+                }},
+                {
+                    'createShape' : {
+                        'objectId' : textboxID,
+                        'shapeType' : 'TEXT_BOX',
+                        'elementProperties' : {
+                            'pageObjectId' : slideNewID,
+                            'size' : {
+                                'width' : {'magnitude' : 3000000, 'unit' : 'EMU'},
+                                'height' : {'magnitude' : 3000000, 'unit' : 'EMU'}
+                            },
+                            'transform' : {
+                                'scaleX' : 3.048,
+                                'scaleY' : 0.2755,
+                                'translateX' : -50,
+                                'translateY' : 1177225,
+                                'unit' : 'EMU'
+                            }
+                        }
+                    }
+                },
+                {
+                    'insertText' : {
+                        'objectId' : textboxID,
+                        'insertionIndex' : 0,
+                        'text' : 'Today\'s Verses'
+                    }
+                },
+                {
+                    'updateTextStyle' : {
+                        'objectId' : textboxID,
+                        'style' : {
+                            'fontFamily' : 'Monstserrat',
+                            'fontSize' : {'magnitude' : '40', 'unit' : 'PT'},
+                            'foregroundColor' : {
+                                'opaqueColor' : {
+                                    'rgbColor' : {
+                                        'blue' : 1.0,
+                                        'green' : 1.0,
+                                        'red' : 1.0
+                                    }
+                                }
+                            },
+                            'bold' : 'true'
+                        },
+                        'textRange' : {'type' : 'FIXED_RANGE', 'startIndex' : 0, 'endIndex' : len('Today\'s Verses')},
+                        'fields' : 'foregroundColor, bold, fontFamily, fontSize'
+                    }
+                },
+                {
+                    'createShape' : {
+                        'objectId' : subtextboxID,
+                        'shapeType' : 'TEXT_BOX',
+                        'elementProperties' : {
+                            'pageObjectId' : slideNewID,
+                            'size' : {
+                                'width' : {'magnitude' : 3000000, 'unit' : 'EMU'},
+                                'height' : {'magnitude' : 3000000, 'unit' : 'EMU'}
+                            },
+                            'transform' : {
+                                'scaleX' : 1.7832,
+                                'scaleY' : 0.3393,
+                                'translateX' : 1897150,
+                                'translateY' : 2062800,
+                                'unit' : 'EMU'
+                            }
+                        }
+                    }
+                },
+                {
+                    'insertText' : {
+                        'objectId' : subtextboxID,
+                        'insertionIndex' : 0,
+                        'text' : toFromHeader
+                    }
+                },
+                {
+                    'updateTextStyle' : {
+                        'objectId' : subtextboxID,
+                        'style' : {
+                            'fontFamily' : 'Arial',
+                            'fontSize' : {'magnitude' : '20', 'unit' : 'PT'},
+                            'foregroundColor' : {
+                                'opaqueColor' : {
+                                    'rgbColor' : {
+                                        'blue' : 1.0,
+                                        'green' : 1.0,
+                                        'red' : 1.0
+                                    }
+                                }
+                            },
+                        },
+                        'textRange' : {'type' : 'FIXED_RANGE', 'startIndex' : 0, 'endIndex' : len(toFromHeader)},
+                        'fields' : 'foregroundColor, fontFamily, fontSize'
+                    }
+                }, 
+                {
+                    'updatePageProperties' : {
+                        'objectId' : slideNewID,
+                        'pageProperties' : {
+                            'pageBackgroundFill' : {
+                                'stretchedPictureFill' : {
+                                    'contentUrl' : background
+                                }
+                            }
+                        },
+                        'fields' : 'pageBackgroundFill'
+                    }
+                }
+            ]
+            # add background page and turn them into white characters
+            self.SLIDES.presentations().batchUpdate(body={'requests': send_req},
+                                            presentationId=self.deckID).execute()
+                    
+        
+        # logic for verses print
+        def versesHelper():
+            verses = bib.getVerses(book, fromChapter, fromVerse, toChapter, toVerse)
+            result = []
+
+            for i in range(len(verses)):
+                if i % 2 == 0:
+                    result.append(verses[i])
+                    if i == len(verses) - 1:
+                        layoutHelper(result[0])
+                elif i % 2 == 1:
+                    result.append(verses[i])
+                    layoutHelper(result[0] + '\n' + result[1])
+                    result = []
+        
+        layoutHelperTitle(book, fromChapter, fromVerse, toChapter, toVerse, background)
+        versesHelper()
+
+        
+        
+
 
