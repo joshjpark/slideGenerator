@@ -14,5 +14,53 @@
             "Holy, Holy, Holy!\nLord God Almighty!\nAll Thy works shall praise\nThy name, in earth, and sky, and sea;",
             "Holy, Holy, Holy!\nMerciful and Mighty!\nGod in three Persons,\nblessed Trinity! Amen."
         ]
+    },
+    {
+        "hymnNumber" : 71,
+        "title" : "All to Jesus I surrender",
+        "author" : "J. W. Van De Venter",
+        "year" : 1896,
+        "lyrics" : [
+            "All to Jesus\nI surrender,\nAll to Him\nI freely give;",
+            "I will ever\nlove and trust Him,\nIn His presence\ndaily live.",
+            "I surrender all\nI surrender all",
+            "All to Three,\nmy blessed Saviour,\nI surrender all."
+        ]
+    },
+    {
+        "hymnNumber" : 122,
+        "title" : "O Come, all ye Faithful",
+        "author" : "J. F. Wade",
+        "year" : 1751,
+        "lyrics" : [
+            ""
+        ]
+    },
+    {
+        "hymnNumber" : 360,
+        "title" : "I Can Hear my Saviour Calling",
+        "author" : "E. W. Blandy",
+        "year" : 1890,
+        "lyrics" : [
+            "I can hear my Saviour calling\nI can hear my Savior calling,",
+            "I can hear my Saviour calling\n\"Take thy cross and follow, follow Me.\"",
+            "Where He leads me\nI will follow\nWhere He leads\nme I will follow",
+            "Where He leads me\nI will follow\nI'll go with Him, with Him all the way",
+            
+            "I'll go with Him through the garden,\nI'll go with Him through the garden",
+            "I'll go with Him through the garden,\nI'll go with Him,\nwith Him all the way.",
+            "Where He leads me\nI will follow\nWhere He leads\nme I will follow",
+            "Where He leads me\nI will follow\nI'll go with Him, with Him all the way",
+
+            "I'll go with Him through the judgment\nI'll go with Him through the judgment",
+            "I'll go with Him through the judgment\nI'll go with Him, with Him\nall the way.",
+            "Where He leads me\nI will follow\nWhere He leads\nme I will follow",
+            "Where He leads me\nI will follow\nI'll go with Him, with Him all the way",
+
+            "He will give me grace and glory\nHe will give me grace and glory,\n",
+            "He will give me grace and glory\nAnd go with me, with me\nall the way.",
+            "Where He leads me\nI will follow\nWhere He leads\nme I will follow",
+            "Where He leads me\nI will follow\nI'll go with Him, with Him all the way"
+        ]
     }
 ]
