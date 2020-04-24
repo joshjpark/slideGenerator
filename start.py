@@ -18,3 +18,4 @@ sn.createVerses('James', '1', '8', '1', '15', '1', '9', 'James message', bg.find
 sn.createHymn(71, "hymn", bg.findRandomImg())
 sn.createTransition('Announcement', bg.findRandomImg())
 sn.createRecital('Prayer', bg.findRandomImg())
+sn.batchExport()

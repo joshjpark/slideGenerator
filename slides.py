@@ -19,6 +19,7 @@ class Slides:
         SCOPES = 'https://www.googleapis.com/auth/presentations', 
         store = file.Storage('storage.json')
         creds = store.get()
+        self.send_req = []
 
         if not creds or creds.invalid:
             flow = client.flow_from_clientsecrets('client_secret.json', SCOPES)
@@ -30,18 +31,10 @@ class Slides:
         rsp = self.SLIDES.presentations().create(body={'title' : 'title'}).execute()
         self.deckID = rsp['presentationId'] # uuid of presentation
         titleSlide = rsp['slides'][0]
-
-        titleID = titleSlide['pageElements'][0]['objectId']
-        subtitleID = titleSlide['pageElements'][1]['objectId']
-
-        print('titleSlide is {}'.format(titleSlide))
         
         # clear init page
-        send_req = [
-            {'deleteObject' : {'objectId' : titleSlide['objectId']}}
-        ]
-        self.SLIDES.presentations().batchUpdate(body={'requests': send_req}, presentationId=self.deckID).execute()
-    
+        self.send_req.append({'deleteObject' : {'objectId' : titleSlide['objectId']}})
+            
     def createTitle(self, date, background):
         slideNewID = gen_uuid()
         dateboxID = gen_uuid()
@@ -243,8 +236,9 @@ class Slides:
                 }
             }
         ]
-        print('**title page created')
-        self.SLIDES.presentations().batchUpdate(body={'requests' : send_req}, presentationId=self.deckID).execute()
+        print('** title page created')
+        self.send_req.append(send_req)
+        # self.SLIDES.presentations().batchUpdate(body={'requests' : send_req}, presentationId=self.deckID).execute()
     
     def createTransition(self, text, background):
         slideNewID = gen_uuid()
@@ -312,8 +306,8 @@ class Slides:
                 }
             }
         ]
-        print('**{} slide created'.format(text))
-        self.SLIDES.presentations().batchUpdate(body={'requests' : send_req}, presentationId=self.deckID).execute()
+        print('** {} slide created'.format(text))
+        self.send_req.append(send_req)
 
     def createRecital(self, recital, background):
         
@@ -448,11 +442,11 @@ class Slides:
                     }
                 }
             ]
-            self.SLIDES.presentations().batchUpdate(body={'requests' : send_req}, presentationId=self.deckID).execute()
+            self.send_req.append(send_req)
         
         helper(recitalVersion, 1)
         helper(recitalVersion, 2)
-        print("**{} slide created".format(recital))
+        print("** {} slide created".format(recital))
 
     def createVerses(self, book, fromChapter, fromVerse, toChapter, toVerse, keyChapter, keyVerse, messageTitle, primaryBackground, secondaryBackground): #keyVerse, background):
         
@@ -523,8 +517,7 @@ class Slides:
                     }
                 }
             ]
-            self.SLIDES.presentations().batchUpdate(body={'requests': send_req},
-                                            presentationId=self.deckID).execute()
+            self.send_req.append(send_req)
 
         # main title layout 
         def layoutHelperTitle(book, fromChapter, fromVerse, toChapter, toVerse, toFromHeader, primaryBackground):
@@ -663,8 +656,7 @@ class Slides:
                 }
             ]
             # add background page and turn them into white characters
-            self.SLIDES.presentations().batchUpdate(body={'requests': send_req},
-                                            presentationId=self.deckID).execute()
+            self.send_req.append(send_req)
         
         # sub title layout
         def layoutHelperSubTitle(book, fromChapter, fromVerse, toChapter, toVerse, keyVerseText, tofromHeader, secondaryBackground):
@@ -850,9 +842,7 @@ class Slides:
                     }
                 }
             ]
-            self.SLIDES.presentations().batchUpdate(body={'requests': send_req},
-                                            presentationId=self.deckID).execute()
-
+            self.send_req.append(send_req)
 
         # logic for verses print
         def versesGenerator():
@@ -878,7 +868,7 @@ class Slides:
         versesGenerator()
         layoutHelperSubTitle(book, fromChapter, fromVerse, toChapter, toVerse, verseFinder(book, keyChapter, keyVerse), toFromHeader, secondaryBackground)
         versesGenerator()
-        print('**Verses slides from {} {}:{}-{}:{} created'.format(book, fromChapter, fromVerse, toChapter, toVerse))
+        print('** Verses slides from {} {}:{}-{}:{} created'.format(book, fromChapter, fromVerse, toChapter, toVerse))
 
     def createHymn(self, number, title, background):
 
@@ -994,7 +984,7 @@ class Slides:
                     }
                 }
             ]
-            self.SLIDES.presentations().batchUpdate(body={'requests' : send_req}, presentationId=self.deckID).execute()
+            self.send_req.append(send_req)
 
         def hymnGenerator(hymn):
             slideNewID = gen_uuid()
@@ -1079,7 +1069,7 @@ class Slides:
                     }
                 }
             ]
-            self.SLIDES.presentations().batchUpdate(body={'requests' : send_req}, presentationId=self.deckID).execute()
+            self.send_req.append(send_req)
         
         # search lyrics of given hymn
         def searchLyrics(hymns, num):
@@ -1104,5 +1094,5 @@ class Slides:
         for lyric in foundLyric:
             hymnGenerator(lyric)
 
-# TODO: delete first page
-# nobody cares 
+    def batchExport(self):
+        self.SLIDES.presentations().batchUpdate(body={'requests' : self.send_req}, presentationId=self.deckID).execute()
