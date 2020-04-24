@@ -350,7 +350,7 @@ class Slides:
                                 'translateX' : 311700,
                                 'translateY' : 63475,
                                 'unit' : 'EMU'
-                            }
+                            },
                         }
                     }
                 },
@@ -458,6 +458,10 @@ class Slides:
 
     def createVerses(self, book, fromChapter, fromVerse, toChapter, toVerse, keyChapter, keyVerse, messageTitle, primaryBackground, secondaryBackground): #keyVerse, background):
         
+        toFromHeader = book + " " + fromChapter + ":" + fromVerse + "-" + toVerse + "\nKey verse " + \
+            + keyChapter + ":" + keyVerse if (fromChapter == toChapter) else book + " " + fromChapter + ":" \
+                + fromVerse + "-" + toChapter + ":" + toVerse + "\nKey verse: " + keyChapter + ":" + keyVerse
+
         # layout for verses
         def layoutHelper(phrase):
 
@@ -511,22 +515,28 @@ class Slides:
                         'style' : {'lineSpacing': 150},
                         'fields' : 'lineSpacing'
                     }
+                },
+                # vertical center
+                {
+                    'updateShapeProperties' : {
+                        'objectId' : textboxID,
+                        'shapeProperties' : {
+                            'contentAlignment' : 'MIDDLE'
+                        },
+                        'fields' : 'contentAlignment'
+                    }
                 }
             ]
             self.SLIDES.presentations().batchUpdate(body={'requests': send_req},
                                             presentationId=self.deckID).execute()
 
         # main title layout 
-        def layoutHelperTitle(book, fromChapter, fromVerse, toChapter, toVerse, primaryBackground):
+        def layoutHelperTitle(book, fromChapter, fromVerse, toChapter, toVerse, toFromHeader, primaryBackground):
             
             slideNewID = gen_uuid()
             textboxID = gen_uuid()
             subtextboxID = gen_uuid()
-            
-            toFromHeader = book + " " + fromChapter + ":" + fromVerse + "-" + toVerse + "\nKey verse" + \
-                + "Key Verse: " if (fromChapter == toChapter) else book + " " + fromChapter + ":" \
-                    + fromVerse + "-" + toChapter + ":" + toVerse + "\n"
-                    
+                                
             send_req = [
                 {'createSlide' : {
                     'objectId' : slideNewID
@@ -661,13 +671,9 @@ class Slides:
                                             presentationId=self.deckID).execute()
         
         # sub title layout
-        def layoutHelperSubTitle(book, fromChapter, fromVerse, toChapter, toVerse, keyVerseText,secondaryBackground):
+        def layoutHelperSubTitle(book, fromChapter, fromVerse, toChapter, toVerse, keyVerseText, tofromHeader, secondaryBackground):
             slideNewID = gen_uuid()
             subtitleID, rangeVerseID, verseKeyID = gen_uuid(), gen_uuid(), gen_uuid()
-
-            toFromHeader = book + " " + fromChapter + ":" + fromVerse + "-" + toVerse + "\nKey verse" + \
-                + "Key Verse: " if (fromChapter == toChapter) else book + " " + fromChapter + ":" \
-                    + fromVerse + "-" + toChapter + ":" + toVerse + "\n"
             
             send_req = [
                 {
@@ -871,10 +877,10 @@ class Slides:
         def verseFinder(book, chapter, verse):
             with open('bible.json') as jsonFile:
                 return json.load(jsonFile)[book][keyChapter][keyVerse].strip('\'\"')
-        
-        layoutHelperTitle(book, fromChapter, fromVerse, toChapter, toVerse, primaryBackground)
+
+        layoutHelperTitle(book, fromChapter, fromVerse, toChapter, toVerse, toFromHeader, primaryBackground)
         versesGenerator()
-        layoutHelperSubTitle(book, fromChapter, fromVerse, toChapter, toVerse, verseFinder(book, keyChapter, keyVerse), secondaryBackground)
+        layoutHelperSubTitle(book, fromChapter, fromVerse, toChapter, toVerse, verseFinder(book, keyChapter, keyVerse), toFromHeader, secondaryBackground)
         versesGenerator()
 
     def createHymn(self, number, title, background):
@@ -1092,5 +1098,3 @@ class Slides:
 
         for lyric in foundLyric:
             hymnGenerator(lyric)
-
-        

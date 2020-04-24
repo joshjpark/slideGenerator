@@ -260,4 +260,70 @@ print('DONE')
                     }
                 }
 
-# we need to: center it, and give it line space 1.5 
+    def createTransition(self, text, background):
+        slideNewID = gen_uuid()
+        textboxID = gen_uuid()
+
+        send_req = [
+            {
+                'createSlide' : {'objectId' : slideNewID}
+            },
+            {
+                'createShape' : {
+                    'objectId' : textboxID,
+                    'shapeType' : 'TEXT_BOX',
+                    'elementProperties': {
+                        'pageObjectId' : slideNewID,
+                        'size' : {
+                            'width' : {'magnitude' : 3000000, 'unit' : 'EMU'},
+                            'height' : {'magnitude' : 3000000, 'unit' : 'EMU'}
+                        },
+                        'transform': {
+                            'scaleX' : 2.664,
+                            'scaleY' : 0.2755,
+                            'translateX' : 576000,
+                            'translateY' : 3847950,
+                            'unit' : 'EMU'
+                        }
+                    }
+                }
+            },
+            {
+                'insertText' : {'objectId' : textboxID, 'text' : text}
+            },
+            {
+                'updateTextStyle' : {
+                    'objectId' : textboxID,
+                    'style' : {
+                        'fontFamily' : 'Montserrat',
+                        'fontSize' : {'magnitude' : 40, 'unit' : 'PT'},
+                        'bold' : 'true',
+                        'foregroundColor' : {
+                            'opaqueColor' : {
+                                'rgbColor' : {
+                                    'blue' : 1.0,
+                                    'green' : 1.0,
+                                    'red' : 1.0
+                                }
+                            }
+                        },
+                    },
+                    'textRange' : {'type' : 'FIXED_RANGE', 'startIndex' : 0, 'endIndex' : len(text)},
+                    'fields' : 'foregroundColor, bold, fontFamily, fontSize'
+                }
+            },
+            {
+                'updatePageProperties' : {
+                    'objectId' : slideNewID,
+                    'pageProperties' : {
+                        'pageBackgroundFill' : {
+                            'stretchedPictureFill' : {
+                                'contentUrl' : background
+                            }
+                        }
+                    },
+                    'fields' : 'pageBackgroundFill'
+                }
+            }
+        ]
+        self.SLIDES.presentations().batchUpdate(body={'requests' : send_req}, presentationId=self.deckID).execute()

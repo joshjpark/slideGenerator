@@ -1,0 +1,11 @@
+// good stuff here 
+
+{
+    'updateShapeProperties' : {
+        'objectId' : headerID,
+        'shapeProperties' : {
+            'contentAlignment' : 'MIDDLE'
+        },
+        'fields' : 'contentAlignment'
+    }
+}
