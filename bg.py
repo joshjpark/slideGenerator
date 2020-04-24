@@ -13,3 +13,4 @@ def findRandomImg():
         return (random.choice(data['Nightsky']))
     else:
         return (random.choice(data['Sky']))
+

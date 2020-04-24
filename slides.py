@@ -34,14 +34,11 @@ class Slides:
         titleID = titleSlide['pageElements'][0]['objectId']
         subtitleID = titleSlide['pageElements'][1]['objectId']
 
+        print('titleSlide is {}'.format(titleSlide))
+        
         # clear init page
         send_req = [
-            {'deleteObject' : {
-                'objectId' : titleID
-            }},
-            {'deleteObject' : {
-                'objectId' : subtitleID
-            }}
+            {'deleteObject' : {'objectId' : titleSlide['objectId']}}
         ]
         self.SLIDES.presentations().batchUpdate(body={'requests': send_req}, presentationId=self.deckID).execute()
     
@@ -459,9 +456,7 @@ class Slides:
 
     def createVerses(self, book, fromChapter, fromVerse, toChapter, toVerse, keyChapter, keyVerse, messageTitle, primaryBackground, secondaryBackground): #keyVerse, background):
         
-        toFromHeader = (book + " " + fromChapter + ":" + fromVerse + "-" + toVerse + "\nKey verse " + \
-            + keyChapter + ":" + keyVerse) if (fromChapter == toChapter) else (book + " " + fromChapter + ":" \
-                + fromVerse + "-" + toChapter + ":" + toVerse + "\nKey verse: " + keyChapter + ":" + keyVerse)
+        toFromHeader = (book + " " + fromChapter + ":" + fromVerse + "-" + toVerse + "\nKey verse " + keyChapter + ":" + keyVerse) if (fromChapter == toChapter) else (book + " " + fromChapter + ":" + fromVerse + "-" + toChapter + ":" + toVerse + "\nKey verse: " + keyChapter + ":" + keyVerse)
 
         # layout for verses
         def layoutHelper(phrase):
@@ -675,7 +670,7 @@ class Slides:
         def layoutHelperSubTitle(book, fromChapter, fromVerse, toChapter, toVerse, keyVerseText, tofromHeader, secondaryBackground):
             slideNewID = gen_uuid()
             subtitleID, rangeVerseID, verseKeyID = gen_uuid(), gen_uuid(), gen_uuid()
-            
+
             send_req = [
                 {
                     'createSlide' : {
@@ -1001,8 +996,6 @@ class Slides:
             ]
             self.SLIDES.presentations().batchUpdate(body={'requests' : send_req}, presentationId=self.deckID).execute()
 
-
-
         def hymnGenerator(hymn):
             slideNewID = gen_uuid()
             textboxID = gen_uuid()
@@ -1110,3 +1103,6 @@ class Slides:
 
         for lyric in foundLyric:
             hymnGenerator(lyric)
+
+# TODO: delete first page
+# nobody cares 
