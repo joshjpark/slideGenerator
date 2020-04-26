@@ -1,7 +1,7 @@
 # background selector 
 import json, random
 
-with open('background.json') as jsonFile:
+with open('../asset/background.json') as jsonFile:
     data = json.load(jsonFile)
 
 def findRandomImg():

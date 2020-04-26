@@ -861,7 +861,7 @@ class Slides:
         
         # logic for finding verse
         def verseFinder(book, chapter, verse):
-            with open('bible.json') as jsonFile:
+            with open('../asset/bible.json') as jsonFile:
                 return json.load(jsonFile)[book][keyChapter][keyVerse].strip('\'\"')
 
         layoutHelperTitle(book, fromChapter, fromVerse, toChapter, toVerse, toFromHeader, primaryBackground)
@@ -1084,7 +1084,7 @@ class Slides:
                     return hymn
 
         # open file and fetch file
-        f = open('./hymn_unnumbered.json') if number == 0 else open('./hymn_numbered.json')
+        f = open('../asset/hymn_unnumbered.json') if number == 0 else open('../asset/hymn_numbered.json')
         loadedJson = json.load(f)
 
         foundHymn = searchHymn(loadedJson, number)

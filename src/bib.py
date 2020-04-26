@@ -1,10 +1,7 @@
 import json
 
-with open('bible.json') as json_file:
-	data = json.load(json_file)
-
 def getVerses(book, fromChapter, fromVerse, toChapter, toVerse):
-	with open('bible.json') as json_file:
+	with open('../asset/bible.json') as json_file:
 		data = json.load(json_file)
 	
 	result = []
