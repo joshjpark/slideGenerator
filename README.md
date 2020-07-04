@@ -18,7 +18,6 @@ I effectively reduced the weekly slide preparation time from manual ~30 minutes 
 
 
 # Usage
-----
 In ```./src```, simply run: 
 ```
 python3 start.py
@@ -40,6 +39,9 @@ Joshuas-MBP:slideGenerator joshua$
 
 Output slides are automatically stored to Google Drive. 
 Here are some examples of its output:
+
 [Output Demo 1](https://docs.google.com/presentation/d/1OSTpD9mweSyiZMSYRiq9Y9-DUTqFYkVKPHEiUD_IysU/edit?usp=sharing)
+
 [Output Demo 2](https://docs.google.com/presentation/d/1OSTpD9mweSyiZMSYRiq9Y9-DUTqFYkVKPHEiUD_IysU/edit?usp=sharing)
+
 [Output Demo 3](https://docs.google.com/presentation/d/1OSTpD9mweSyiZMSYRiq9Y9-DUTqFYkVKPHEiUD_IysU/edit?usp=sharing)
